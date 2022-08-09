@@ -2,7 +2,7 @@
 
 1. Clone the repo 
 
-2. Run `conda env create -f environment.yml`
+2. Run `conda env create -f environment.yml && conda activate slurmgui`
 
 3. Set the password with `python reset_password.py <your password>`
 
