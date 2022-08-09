@@ -1,0 +1,255 @@
+<!doctype html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
+<script>
+    var socket;
+    var selected;
+    $(document).ready(function() {
+        $('#job_form').css('display', 'none');
+
+        // Connect to the Socket.IO server.
+        // The connection URL has the following format, relative to the current page:
+        //     http[s]://<domain>:<port>[/<namespace>]
+        socket = io.connect('http://' + document.domain + ':' + location.port + '/');
+        socket.on('update', function(msg) {
+            for (const [key, value] of Object.entries(msg['html'])) {
+                $('#' + key).html(value);
+            }
+            makeSelectable();
+
+            for (const [key, value] of Object.entries(msg['html'])) {
+                if (!$('#' + key).hasClass('updated')) {
+                    OnFirstUpdate(key);
+                    $('#' + key).toggleClass('updated');
+                }
+            }
+        });
+        socket.on('select', function(msg) {
+            selected = msg;
+            sessionStorage.setItem('selected_job', selected);
+            selected = $('.selectable').filter((_, e) => {
+                return e.id == selected;
+            })
+            selected.click();
+            $('#job_scroll').scrollTop(selected.position().top - 25);
+        });
+    });
+
+    setInterval(() => {
+        socket.emit('update');
+    }, 3000);
+
+    function OnFirstUpdate(key) {
+        switch (key) {
+            case 'jobs':
+                selected = $('.selectable').filter((_, e) => {
+                    return e.id == sessionStorage.getItem('selected_job');
+                })
+                selected.click();
+
+                $('#job_scroll').scrollTop(selected.position().top - 25);
+
+            case 'sacct':
+                OnPartitionChanged($("#partition_input")[0]);
+                break;
+        }
+
+    }
+
+    function OnItemSelected(element) {
+        selected = element;
+        sessionStorage.setItem('selected_job', element[0].id);
+        $('.selectable').removeClass('selected');
+        element.toggleClass('selected');
+        $('#job_script').html('Loading...');
+        $('#output').html('Loading...');
+        socket.emit('select_job', {
+            'job_id': sessionStorage.getItem('selected_job')
+        });
+    }
+
+    function makeSelectable() {
+        $('.selectable').click(function() {
+            $(this).toggleClass('selected');
+            OnItemSelected($(this));
+        });
+        $('.selectable').mouseover(function() {
+            $(this).toggleClass('hover');
+        });
+        $('.selectable').mouseleave(function() {
+            $(this).removeClass('hover');
+        });
+        $('.selectable').filter((_, e) => {
+            return e.id == sessionStorage.getItem('selected_job');
+        }).addClass('selected');
+    }
+
+
+    function toggle_job_form() {
+        if ($('#job_form').css('display') == 'none') {
+            $('#job_form').css('display', 'block');
+        } else {
+            $('#job_form').css('display', 'none');
+        }
+    }
+
+    function OnPartitionChanged(e) {
+        switch (e.value) {
+            case 'gtest':
+                $("#time_input").val('00:30:00');
+                break;
+            case 'gp1d':
+                $("#time_input").val('24:00:00');
+                break;
+            case 'gp2d':
+                $("#time_input").val('48:00:00');
+                break;
+            case 'gp4d':
+                $("#time_input").val('96:00:00');
+                break;
+            case 'express':
+                $("#time_input").val('96:00:00');
+                break;
+        }
+
+        $('#sinfo')[0].innerText.split('\n').forEach((line) => {
+            if (line.startsWith(e.value)) {
+                res = new RegExp('[0-9]+').exec(line.split(' ')[5])[0];
+                console.log(res);
+                $('#node_input').val('gn' + res);
+            }
+        });
+    }
+
+    function cancel() {
+        state = $('#' + sessionStorage.getItem('selected_job') + '>td')[2].innerText;
+        name = $('#' + sessionStorage.getItem('selected_job') + ">td")[1].innerText;
+        if (!(state == 'RUNNING' || state == 'PENDING')) {
+            return;
+        }
+        if (confirm(`Are you sure to cancel job ${name}, id:${sessionStorage.getItem('selected_job')}?`)) {
+            socket.emit('cancel_job', {
+                'job_id': sessionStorage.getItem('selected_job')
+            });
+        }
+    }
+</script>
+<style>
+    input {
+        min-width: 100%;
+        border-color: #333;
+    }
+    
+    body {
+        min-height: 3000px;
+    }
+</style>
+
+{% extends 'base.html' %}
+
+<h1>{% block title %}Slurm{% endblock %}</h1>
+
+
+{% block content %}
+<div class="row">
+    <div class="column" style="flex: 10;">
+        <h2>sinfo </h2>
+        <div class="indent">
+            <div class="console" id="sinfo">Loading</div>
+
+        </div>
+        <h2>sacct </h2>
+        <div class="indent">
+            <div class="console" id="sacct">Loading</div>
+
+        </div>
+    </div>
+    <div class="column">
+
+        <h2>jobs </h2>
+        <div class="indent">
+            <div class="console">
+                <div style="overflow: scroll; max-height: 400px;" id="job_scroll">
+                    <table id="jobs">
+
+                    </table>
+                </div>
+                <br>
+                <button onclick="toggle_job_form()">new</button>
+                <button onclick="cancel()">cancel</button>
+                <div id="add_job_form">
+                    <form action="/slurm/submit_job" method="post" id="job_form">
+                        <table id="jobs" class="form_table">
+                            <tr>
+                                <td><label for="name">Name</label></td>
+                                <td><input type="text" name="name" placeholder="name" value="{{ htmldata.defaults.name }}" required></td>
+                            </tr>
+                            <tr>
+                                <td><label for="#SBATCH -A">#SBATCH -A</label></td>
+                                <td><input type="text" name="#SBATCH -A " placeholder="account" value="{{ htmldata.defaults.account }}"></td>
+                            </tr>
+                            <tr>
+                                <td><label for="#SBATCH -p">#SBATCH -p</label></td>
+                                <td><select name="#SBATCH -p " id="partition_input" type="text" name="#SBATCH -p " onchange="OnPartitionChanged(this)" onload="OnPartitionChanged(this)" style="font-size:14px;">
+                                    <option value="gtest">gtest</option>
+                                    <option value="gp1d">gp1d</option>
+                                    <option value="gp2d">gp2d</option>
+                                    <option value="gp4d">gp4d</option>
+                                    <option value="express">express</option>
+                                  </select>
+                            </tr>
+                            <tr>
+                                <td><label for="#SBATCH --nodes=">#SBATCH --nodes=</label></td>
+                                <td><input type="number" name="#SBATCH --nodes=" placeholder="1" value="1" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="#SBATCH --nodelist=">#SBATCH --nodelist=</label></td>
+                                <td><input id="node_input" type="text" name="#SBATCH --nodelist=" placeholder="" value="gn" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="#SBATCH --time=">#SBATCH --time=</label></td>
+                                <td><input id="time_input" type="text" name="#SBATCH --time=" placeholder="24:00:00" value="24:00:00" required></td>
+                            </tr>
+                            <tr>
+                                <td><label for="#SBATCH --gres=gpu:">#SBATCH --gres=gpu:</label></td>
+                                <td><input type="number" name="#SBATCH --gres=gpu:" placeholder="gpu number" value="8" required></td>
+                            </tr>
+                            <tr>
+                                <td><label for="#SBATCH --cpus-per-task ">#SBATCH --cpus-per-task</label></td>
+                                <td><input type="text" name="#SBATCH --cpus-per-task " placeholder="cpu number" value="32" required></td>
+                            </tr>
+                            <tr>
+                                <td><label for="job_script">Job script content</label></td>
+                                <td><textarea name="job_script" style="width:500px;height:150px;" form="job_form"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td><label for="script location">Script location</label></td>
+                                <td><input type="text" name="script location" placeholder="" value="{{session.script_loc}}" required></td>
+                            </tr>
+                            <tr>
+                                <td><label for="output location">Output location</label></td>
+                                <td><input type="text" name="output location" placeholder="" value="{{session.output_loc}}" required></td>
+                            </tr>
+
+                        </table>
+                        <p id="message"></p>
+                        <input type="submit" value="submit">
+                    </form>
+                </div>
+            </div>
+
+            <h3>job_script</h3>
+            <div class="console " id="job_script">Loading</div>
+            <h3>output</h3>
+            <div class="console " id="output">Loading</div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}

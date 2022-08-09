@@ -1,0 +1,195 @@
+body {
+    background-color: black;
+    color: #ffffff;
+    font-family: "Raleway", "Microsoft JhengHei";
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 50px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://i.imgur.com/pkiX69L.jpeg");
+}
+
+input,
+textarea {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+button,
+select {
+    background-color: #00133b;
+    color: #ffffff;
+    font-family: "Raleway", "Microsoft JhengHei";
+    border: 1px solid #ffffff6c;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0px;
+}
+
+button:hover,
+select:hover {
+    background-color: #002a69;
+}
+
+button:active,
+select:active {
+    background-color: #000e22;
+}
+
+.hover {
+    background-color: #111;
+}
+
+.selected {
+    background-color: rgb(11, 37, 68);
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+table {
+    padding: 1em;
+    border: 1px solid rgb(114, 114, 114);
+    border-collapse: collapse;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 0.3em;
+    min-width: 100px;
+}
+
+th {
+    color: #3BF;
+}
+
+table.form_table {
+    border: none;
+}
+
+table .form_table>tr>td {
+    border: none;
+}
+
+li {
+    line-height: 2em;
+}
+
+nav {
+    text-align: center;
+}
+
+input {
+    font-family: Consolas, 'Courier New', Courier;
+    font-size: 14px;
+    line-height: 1.3em;
+}
+
+.console {
+    padding: 10px;
+    margin: 10px;
+    background-color: rgba(0, 0, 0, 0.603);
+    font-family: Consolas, 'Courier New', Courier;
+    font-size: 14px;
+    line-height: 1.3em;
+}
+
+.console>p {
+    margin: 0.2em;
+}
+
+.indent {
+    margin-left: 2em;
+}
+
+a:visited {
+    color: #eca95ce0;
+}
+
+a:link {
+    color: #ff7540;
+}
+
+a {
+    text-decoration: none;
+}
+
+h2:after,
+h3:after,
+h4:after {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    border-radius: 2px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+h2:after {
+    background: #0AF;
+}
+
+h3:after {
+    background: #3BF;
+}
+
+h4:after {
+    background: #6Cf;
+}
+
+h1 {
+    font-size: 36px;
+    line-height: 30px;
+    margin: 1em 0 .6em 0;
+    font-weight: normal;
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    position: relative;
+    color: #6Cf;
+}
+
+h2 {
+    margin: 1em 0 .6em 0;
+    padding: 0 0 0 20px;
+    font-weight: normal;
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    position: relative;
+    font-size: 30px;
+    line-height: 30px;
+}
+
+h3 {
+    margin: 1em 0 .6em 0;
+    padding: 0 0 0 20px;
+    font-weight: normal;
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    position: relative;
+    font-size: 24px;
+    line-height: 25px;
+}
+
+h4 {
+    margin: 1em 0 .6em 0;
+    padding: 0 0 0 20px;
+    font-weight: normal;
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    position: relative;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.row {
+    display: flex;
+}
+
+.column {
+    flex: 50%;
+    margin: 0px 30px 0px 30px;
+}

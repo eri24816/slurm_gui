@@ -1,0 +1,43 @@
+<!doctype html>
+
+<head>
+    <style>
+        .nav_ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0em;
+            overflow: hidden;
+            background-color: rgba(0, 153, 255, 0.116);
+            align-items: center;
+        }
+        
+        .nav_ul>li {
+            margin: 1em;
+            display: inline-block;
+        }
+    </style>
+</head>
+<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+<title>{% block title %}{% endblock %} - HPC Helper</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+<nav>
+    <h1 style="color: aliceblue;">{{self.title()}} -<a href="{{ url_for('index') }}"> HPC helper</a></h1>
+    <ul class="nav_ul">
+        {% if session.logged_in %}
+        <li><a href="{{ url_for('index') }}">Index</a></li>
+        <li><a href="{{url_for('posts.post',name = 'ssh_help')}}">SSH help</a></li>
+        <li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
+        {% else %}
+        <li><a href="{{ url_for('auth.login') }}">Log in</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<section class="content">
+    <header>
+        {% block header %}{% endblock %}
+    </header>
+    {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %} {% block content %}{% endblock %}
+</section>
