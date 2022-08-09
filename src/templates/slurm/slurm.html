@@ -10,7 +10,7 @@
         // Connect to the Socket.IO server.
         // The connection URL has the following format, relative to the current page:
         //     http[s]://<domain>:<port>[/<namespace>]
-        socket = io.connect('http://' + document.domain + ':' + location.port + '/');
+        socket = io.connect('https://' + document.domain + ':' + location.port + '/');
         socket.on('update', function(msg) {
             for (const [key, value] of Object.entries(msg['html'])) {
                 $('#' + key).html(value);
