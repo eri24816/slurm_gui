@@ -5,7 +5,11 @@
     var socket;
     var selected;
     $(document).ready(function() {
+        
         $('#job_form').css('display', 'none');
+        for (const [key, value] of Object.entries(last_submit_form)) {
+            $('#job_form')[0][key].value = value
+        }
 
         // Connect to the Socket.IO server.
         // The connection URL has the following format, relative to the current page:
@@ -134,6 +138,9 @@
         }
     }
 </script>
+<script>
+    last_submit_form = {{session.last_submit_form | tojson}}
+</script>
 <style>
     input {
         min-width: 100%;
@@ -221,17 +228,18 @@
                                 <td><input type="text" name="#SBATCH --cpus-per-task " placeholder="cpu number" value="32" required></td>
                             </tr>
                             <tr>
+                                <td><label for="#SBATCH --chdir ">#SBATCH --chdir </label></td>
+                                <td><input type="text" name="#SBATCH --chdir " placeholder="working directory" value=""></td>
+                            </tr>
+                            <tr>
                                 <td><label for="job_script">Job script content</label></td>
-                                <td><textarea name="job_script" style="width:500px;height:150px;" form="job_form"></textarea></td>
+                                <td><textarea name="job_script" style="width:600px;height:300px;font-size: small;" form="job_form"></textarea></td>
                             </tr>
                             <tr>
-                                <td><label for="script location">Script location</label></td>
-                                <td><input type="text" name="script location" placeholder="" value="{{session.script_loc}}" required></td>
+                                <td><label for="additional args">additional args</label></td>
+                                <td><input type="text" name="additional args" placeholder="--arg value" value=""></td>
                             </tr>
-                            <tr>
-                                <td><label for="output location">Output location</label></td>
-                                <td><input type="text" name="output location" placeholder="" value="{{session.output_loc}}" required></td>
-                            </tr>
+
 
                         </table>
                         <p id="message"></p>

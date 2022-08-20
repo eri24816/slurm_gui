@@ -11,7 +11,7 @@ def run():
     app = create_app()
     socketio.init_app(app)
     app.secret_key = __import__('os').urandom(24)
-    socketio.run(app,debug=False,port=5000,ssl_context='adhoc')
+    socketio.run(app,debug=True,port=8721,ssl_context='adhoc')
 
 if __name__ == '__main__':
     run()
