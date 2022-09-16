@@ -131,7 +131,7 @@
         if (!(state == 'RUNNING' || state == 'PENDING')) {
             return;
         }
-        if (confirm(`Are you sure to cancel job ${name}, id:${sessionStorage.getItem('selected_job')}?`)) {
+        if (confirm(`Cancel job ${name}, id:${sessionStorage.getItem('selected_job')}?`)) {
             socket.emit('cancel_job', {
                 'job_id': sessionStorage.getItem('selected_job')
             });
@@ -243,7 +243,7 @@
 
                         </table>
                         <p id="message"></p>
-                        <input type="submit" value="submit">
+                        <input type="submit" value="submit",style="height: 100px;">
                     </form>
                 </div>
             </div>
