@@ -21,11 +21,11 @@
 <title>{% block title %}{% endblock %} - HPC Helper</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <script src="{{ url_for('static', filename='main.js') }}"></script>
+<!--
 <nav>
-    <h1 style="color: aliceblue;">{{self.title()}} -<a href="{{ url_for('index') }}"> HPC helper</a></h1>
     <ul class="nav_ul">
+        <li>{{self.title()}} -<a href="{{ url_for('index') }}"> HPC helper</a></li>
         {% if session.logged_in %}
-        <li><a href="{{ url_for('index') }}">Index</a></li>
         <li><a href="{{url_for('posts.post',name = 'ssh_help')}}">SSH help</a></li>
         <li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
         {% else %}
@@ -33,6 +33,7 @@
         {% endif %}
     </ul>
 </nav>
+-->
 <section class="content">
     <header>
         {% block header %}{% endblock %}

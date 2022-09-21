@@ -107,8 +107,8 @@ def select_job(message):
     session['selected_job_id'] = job_id
     manager.UpdateOutput(job_id)
     emit('update', {'html':{
-            'output':outputs[session['selected_job_id']],
-            'job_script':scripts[session['selected_job_id']]
+            'output':myEscape(outputs[session['selected_job_id']]),
+            'job_script':myEscape(scripts[session['selected_job_id']])
         }},to='slurm')
 
 @socketio.on('cancel_job')
