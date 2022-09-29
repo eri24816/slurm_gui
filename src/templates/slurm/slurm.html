@@ -46,9 +46,14 @@
     function OnFirstUpdate(key) {
         switch (key) {
             case 'jobs':
-                selected = $('.selectable').filter((_, e) => {
-                    return e.id == sessionStorage.getItem('selected_job');
-                })
+                if (sessionStorage.getItem('selected_job')){
+                    selected = $('.selectable').filter((_, e) => {
+                        return e.id == sessionStorage.getItem('selected_job');
+                    })
+                }
+                else {
+                    selected = $('.selectable').last();
+                }
                 selected.click();
 
                 $('#job_scroll').scrollTop(selected.position().top - 25);
@@ -148,7 +153,8 @@
     }
     
     body {
-        min-height: 3000px;
+        height: 100%;
+        overflow-y: hidden;
     }
 </style>
 
@@ -239,16 +245,8 @@
                 </form>
             </div>
         </div>
-        <h2>sinfo </h2>
-        <div class="indent">
             <div class="console" id="sinfo">Loading</div>
-
-        </div>
-        <h2>sacct </h2>
-        <div class="indent">
             <div class="console" id="sacct">Loading</div>
-
-        </div>
     </div>
 
 </div>
