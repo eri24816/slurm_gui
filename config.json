@@ -1,6 +1,6 @@
 {
     "defaults":{
-        "account":"<set default account in config.json>",
+        "account":"ACD110038",
         "name":""
     }
 }

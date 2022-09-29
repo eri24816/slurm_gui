@@ -172,19 +172,17 @@
         <div class="console " id="output" style="overflow: scroll; max-height: 400px;">Loading</div>
 
     </div>
-    <div class="column" style="flex: 10;">
+    <div class="column" style="flex: 10; min-width: 50%;">
         <div class="console">
-            <div style="overflow: scroll; max-height: 400px;" id="job_scroll">
-                <table id="jobs">
-
-                </table>
-            </div>
+            
             <br>
             <button onclick="toggle_job_form()">new</button>
             <button onclick="cancel()">cancel</button>
             <div id="add_job_form">
                 <form action="/slurm/submit_job" method="post" id="job_form">
-                    <table id="jobs" class="form_table">
+                    
+                    
+                    <table class="form_table">
                         <tr>
                             <td><label for="name">Name</label></td>
                             <td><input type="text" name="name" placeholder="name" value="{{ htmldata.defaults.name }}" required></td>
@@ -240,9 +238,15 @@
 
 
                     </table>
-                    <p id="message"></p>
                     <input type="submit" value="submit">
+                    <p id="message"></p>
                 </form>
+            </div>
+            <br>
+            <div style="overflow: scroll; max-height: 400px;" id="job_scroll">
+                <table id="jobs">
+
+                </table>
             </div>
         </div>
             <div class="console" id="sinfo">Loading</div>
