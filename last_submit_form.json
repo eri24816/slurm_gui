@@ -1,1 +1,0 @@
-{"name": "test", "#SBATCH -A ": "ACD110038", "#SBATCH -p ": "gtest", "#SBATCH --nodes=": "2", "#SBATCH --nodelist=": "gn1227", "#SBATCH --time=": "00:30:00", "#SBATCH --gres=gpu:": "1", "#SBATCH --cpus-per-task ": "1", "#SBATCH --chdir ": "/home/nckuhpclab07/eri24816/2022-APAC-HPC-AI/dna_torch/", "job_script": "pwd\r\necho [ 1 + 1 ]\r\necho qger", "additional args": ""}
