@@ -79,7 +79,8 @@ def socketioLoop():
         
         if  'selected_job_id' in session:
             manager.UpdateOutput(session['selected_job_id'])
-            socketio.emit('update', {'html':{'output':outputs[session['selected_job_id']]}},to='slurm')
+            if session['selected_job_id'] in outputs:
+                socketio.emit('update', {'html':{'output':outputs[session['selected_job_id']]}},to='slurm')
         socketio.sleep(5)
 
 @socketio.on('update')
@@ -91,11 +92,11 @@ def update():
             emit('select', manager.justSubmitted,to='slurm')
             manager.justSubmitted = None
         manager.UpdateOutput(session['selected_job_id'])
-        emit('update', {'html':{
-            'output':myEscape(outputs[session['selected_job_id']]),
-            'job_script':myEscape(scripts[session['selected_job_id']])
-        }},to='slurm')
-
+        if session['selected_job_id'] in outputs and session['selected_job_id'] in scripts:
+            emit('update', {'html':{
+                'output':myEscape(outputs[session['selected_job_id']]),
+                'job_script':myEscape(scripts[session['selected_job_id']])
+            }},to='slurm')
 
 @socketio.on('disconnect')
 def disconnect():

@@ -1,0 +1,7 @@
+{
+    "defaults":{
+        "account":"<Fill your account here>",
+        "name":""
+    },
+    "port":15001
+}

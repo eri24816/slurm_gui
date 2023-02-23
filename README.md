@@ -6,7 +6,7 @@
 
 3. Set the password with `python reset_password.py <your password>`.
 
-4. Open `config.json` and set the default account (your project account number).
+4. Open `config.json` in the root folder, and set the defaults.account field to your slurm project/account id.
 
 ## Usage
 

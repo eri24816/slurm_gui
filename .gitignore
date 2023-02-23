@@ -1,6 +1,5 @@
 data/
 password.txt
-config.json
 last_submit_form.json
 
 # Byte-compiled / optimized / DLL files
