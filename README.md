@@ -1,18 +1,20 @@
 ## Installation
 
-1. Clone the repo.
+1. Clone the repo. Run `cd slurm_gui`.
 
-2. Run `conda env create -f environment.yml && conda activate slurmgui`.
+2. Run `conda create --name slurmgui python=3.9.0 && conda activate slurmgui`.
 
-3. Set the password with `python reset_password.py <your password>`.
+3. Run `pip install -r requirements.txt`.
 
-4. Open `config.json` in the root folder, and set the defaults.account field to your slurm project/account id.
+4. Set the password with `python reset_password.py <your password>`.
+
+5. Open `config.json` in the root folder, and set the defaults.account field to your slurm project/account id.
 
 ## Usage
 
 1. Start the app with `python main.py`.
 
-2. Go to `https://127.0.0.1:5000/`. Log in and go to "slurm".
+2. Go to `https://127.0.0.1:15001/`. Log in and go to "slurm".
 
 > **_NOTE:_**  If the page does not load completely, please reload it
 
