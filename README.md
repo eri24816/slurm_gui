@@ -18,7 +18,7 @@
 
 > **_NOTE:_**  If the page does not load completely, please reload it
 
-3. In the "Jobs" block, click new to open the form for submitting jobs. Fill out the form and click "submit" to submit the job to slurm.
+3. Click "new" button to open the form for submitting jobs. Fill out the form and click "submit" to submit the job to slurm.
 
 ![image](resource/new.png)
 
